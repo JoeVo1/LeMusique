@@ -1,3 +1,3 @@
+@echo off
 call npm install
-node .
-pause
+node "./index.js"

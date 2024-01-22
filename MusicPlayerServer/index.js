@@ -7,6 +7,7 @@ import express from 'express'
 import http from 'http'
 
 const app = express()
+app.use(express.static("music"));
 const server = http.createServer(app)
 
 const io = new Server(server)
@@ -65,7 +66,7 @@ io.on("connection",(socket)=>{
 server.listen(8008)
 
 while(true){
-    let inputtext = await input.text("Console");
+    let inputtext = (await input.text("Console")).toLowerCase();
     if(inputtext == "start"){
         StartMusicLoop()
     }
@@ -79,6 +80,12 @@ while(true){
         io.emit("resume")
         timer.resume()
     }
+    else if(inputtext == "send"){
+        const files = await fs.readdir(musicLoc)
+        files.forEach(file => {
+            io.emit("download", file);
+        });
+    }
 }
 
 function Random(min, max){
@@ -91,6 +98,7 @@ async function StartMusicLoop(){
     if(musicFiles.length === 0){
         console.log("\nRan out of music to play. Looping music.")
         await PushAllMusicFiles()
+        if(musicFiles.length === 0) return;
     }
     let random = Random(0, musicFiles.length - 1);
     timer.clear()
@@ -101,12 +109,17 @@ async function StartMusicLoop(){
     songLength = (await sf.parseFile(curPlayingPath)).format.duration * 1000
     let index = usernames.indexOf(curPlaying);
     musicFiles.splice(index, 1);
-    console.log("\nNow Playing: " + curPlaying + "\nSongs Left in loop:" + musicFiles.length)
+    console.log("\nNow Playing: " + curPlaying + "\nSongs Left in loop: " + musicFiles.length)
     WaitForSongEnd()
 }
 
 async function PushAllMusicFiles(){
-    (await fs.readdir(musicLoc)).forEach(file => {
+    let files = await fs.readdir(musicLoc)
+    if(files.length === 0) {
+        console.log("\nThere was a problem reading the music folder. Is it empty?")
+        return;
+    }
+    (files).forEach(file => {
         if(!file.endsWith(".wav")) {Console.log("\nFile Declined: " + file)}
         musicFiles.push(file)
     });
