@@ -61,6 +61,16 @@ io.on("connection",(socket)=>{
         }
     });
     
+    socket.on("sync", ()=>{
+        socket.emit("sync", (timer.ms()))
+    })
+
+    socket.on("download", async ()=>{
+        const files = await fs.readdir(musicLoc)
+        files.forEach(file => {
+            socket.emit("download", file);
+        });
+    })
 })
 
 server.listen(8008)
@@ -73,7 +83,7 @@ while(true){
     else if(inputtext == "pause"){
         console.log("Paused.")
         timer.pause()
-        io.emit("pause",(timer.ms()))
+        io.emit("pause", (timer.ms()))
     }
     else if(inputtext == "resume"){
         console.log("Resumed.")
