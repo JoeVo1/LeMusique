@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <audio id="audio" src=""></audio>
+        <link rel="stylesheet" href="styles.css">
+        <script defer src="main.js" type="module"></script>
+    </head>
+    <body style="background-color: rgb(0, 13, 20);">
+        <div class ="holder">
+            <div class = "musiclist">
+                <ul class = "insidelist", id = "list">
+                    <li class = "item" style="color: rgb(255, 69, 69); border-top-left-radius: 10px; border-top-right-radius: 10px;"></li>
+                    <li class = "item"></li>
+                    <li class = "item"></li>
+                    <li class = "item"></li>
+                    <li class = "item"></li>
+                    <li class = "item"></li>
+                    <li class = "item"></li>
+                    <li class = "item"></li>
+                    <li class = "item"></li>
+                    <li class = "item"></li>
+                </ul>
+            </div>
+
+            <div class = "mainholder">
+                <div class="main">
+                    <input class="volumeSlider" id="volume" type="range" value="0.5" min="0" max="1" step="0.01"/>
+                    <button class="syncBtn" id = "sync">Sync</button>
+                    <button class="pingBtn" id = "ping">Ping</button>
+                </div>
+    
+                <div class ="title">
+                    <p class="name" id = "name">Connecting to server...</p>
+                    <div>
+                        <span class="time" id="songpos">0</span>
+                        <span class="time">/</span>
+                        <span class="time" id ="songlength">0</span>
+                    </div>
+                    <p id = "_console" class="console"></p>
+                </div>
+            </div>
+            
+            <div class = right></div>
+        </div>
+        <div class="footer">
+            <progress class="progressBar" id="progress" value="0.0" min="0" max="1" step="0.01"/>
+        </div>
+    </body>
+</html> 
